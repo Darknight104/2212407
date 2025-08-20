@@ -1,9 +1,17 @@
 {
-  "name": "url-shortener",
+  "name": "backend_test_submission",
   "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "type": "module",
   "dependencies": {
-    "dotenv": "^16.4.5",
-    "express": "^4.21.2"
+    "express": "^5.1.0",
+    "node-fetch": "^3.3.2"
   }
 }

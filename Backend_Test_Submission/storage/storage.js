@@ -1,33 +1,28 @@
-const store = new Map();
-function saveEntry(shortcode, target, expiry) {
-  store.set(shortcode, {
-    target,
-    expiry,
-    created: new Date(),
-    clicks: []
-  });
+const urls = new Map();
+export function saveUrl(shortcode, longUrl, expiresAt) {
+  const createdAt = new Date();
+  urls.set(shortcode, { longUrl, expiresAt, createdAt, clicks: [] });
 }
-function fetchEntry(shortcode) {
-  return store.get(shortcode) || null;
+export function getUrl(shortcode) {
+  return urls.get(shortcode) || null;
 }
-function addVisit(shortcode, details) {
-  const entry = store.get(shortcode);
-  if (!entry) return;
-  entry.clicks.push({ time: new Date(), ...details });
+export function addClick(shortcode, info) {
+  const row = urls.get(shortcode);
+  if (!row) return;
+  row.clicks.push({ ts: new Date(), ...info });
 }
-function expired(entry) {
-  return !entry || entry.expiry.getTime() <= Date.now();
+export function isExpired(row) {
+  return !row || row.expiresAt.getTime() <= Date.now();
 }
-function stats(shortcode) {
-  const entry = store.get(shortcode);
-  if (!entry) return null;
+export function getStats(shortcode) {
+  const row = urls.get(shortcode);
+  if (!row) return null;
   return {
     shortcode,
-    target: entry.target,
-    created: entry.created.toISOString(),
-    expiry: entry.expiry.toISOString(),
-    totalClicks: entry.clicks.length,
-    recentClicks: entry.clicks.slice(-50)
+    longUrl: row.longUrl,
+    createdAt: row.createdAt.toISOString(),
+    expiry: row.expiresAt.toISOString(),
+    totalClicks: row.clicks.length,
+    clicks: row.clicks.slice(-50)
   };
 }
-export { saveEntry, fetchEntry, addVisit, expired, stats };
